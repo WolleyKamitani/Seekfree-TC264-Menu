@@ -442,7 +442,7 @@ void menu_adjust_step(plus_minus_enum direction)
  *
  * @param direction
  */
-void menu_adjust_value(plus_minus_enum direction)
+void menu_adjust_data(plus_minus_enum direction)
 {
     switch (menu.item_index)
     {
@@ -525,6 +525,8 @@ void drawsmile() { tft180_show_styled_string(CENTER, 0, 150, ":)", FALSE, FALSE)
  */
 void menu_init(void)
 {
+    tft180_set_default_font(TFT180_6X8_FONT);
+
     menu_add_page("MAIN");
     menu_add_item("MAIN", "float", &float_test, TYPE_FLOAT, TRUE);
     menu_add_item("MAIN", "double", &double_test, TYPE_DOUBLE, TRUE);

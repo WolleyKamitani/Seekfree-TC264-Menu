@@ -4,5 +4,6 @@
 #include "common.h"
 #include "screen.h"
 #include "menu.h"
+#include "key.h"
 
 #endif

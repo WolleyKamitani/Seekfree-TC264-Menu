@@ -56,21 +56,17 @@ int core0_main(void)
     debug_init(); // 初始化默认调试串口
     // 此处编写用户代码 例如外设初始化代码等
 
-    tft180_init();
+    pit_ms_init(CCU60_CH0, 10); // 10ms PIT中断 用于按键扫描
+    key_init(10);               // 按键初始化 10ms扫描一次
+    tft180_init();              // 屏幕初始化
+    menu_init();                // 菜单初始化
 
     // 此处编写用户代码 例如外设初始化代码等
     cpu_wait_event_ready(); // 等待所有核心初始化完毕
     while (TRUE)
     {
         // 此处编写需要循环执行的代码
-        tft180_set_default_font(TFT180_6X8_FONT);
-        tft180_show_styled_string(LEFT, 0, 0, "TEST WORD", FALSE, FALSE);
-        tft180_show_styled_string(CENTER, 0, 10, "TEST WORD", FALSE, TRUE);
-        tft180_show_styled_string(RIGHT, 0, 20, "TEST WORD", TRUE, FALSE);
-        tft180_set_default_font(TFT180_8X16_FONT);
-        tft180_show_styled_string(LEFT, 0, 40, "TEST WORD", FALSE, FALSE);
-        tft180_show_styled_string(CENTER, 0, 60, "TEST WORD", FALSE, TRUE);
-        tft180_show_styled_string(RIGHT, 0, 80, "TEST WORD", TRUE, FALSE);
+        menu_refresh();
         // 此处编写需要循环执行的代码
     }
 }
