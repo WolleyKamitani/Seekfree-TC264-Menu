@@ -2,24 +2,21 @@
 #define _screen_h_
 
 #include "zf_common_headfile.h"
+#include "common.h"
 
-//========================TFT180 ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½========================//
-typedef enum
-{
-    STRING_LEFT,   // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
-    STRING_CENTER, // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
-    STRING_RIGHT,  // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
-} tft180_string_pos_enum;
-//========================TFT180 ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½========================//
+//========================TFT180 ×Ô¶¨ÒåÈ«¾Ö±äÁ¿========================//
+extern tft180_dir_enum tft180_display_dir;
+extern tft180_font_size_enum tft180_display_font;
+extern uint8 tft180_x_max;
+extern uint8 tft180_y_max;
+//========================TFT180 ×Ô¶¨ÒåÈ«¾Ö±äÁ¿========================//
 
-//========================TFT180 ï¿½Ô¶ï¿½ï¿½åº¯ï¿½ï¿½========================//
-uint16 tft180_char_pixel_width(void);
-uint16 tft180_char_pixel_height(void);
+//========================TFT180 ×Ô¶¨Òå»ù´¡º¯Êý========================//
 void tft180_set_default_dir(tft180_dir_enum dir);
 void tft180_set_default_font(tft180_font_size_enum font);
 void tft180_set_default_color(uint16 pencolor, uint16 bgcolor);
 void tft180_show_styled_char(uint16 x, uint16 y, const char dat, bool reverse, bool underline);
-void tft180_show_styled_string(tft180_string_pos_enum string_pos, uint16 offset, uint16 y, const char dat[], bool reverse, bool underline);
-//========================TFT180 ï¿½Ô¶ï¿½ï¿½åº¯ï¿½ï¿½========================//
+void tft180_show_styled_string(horizontal_align_enum string_align, uint16 offset, uint16 y, const char dat[], bool reverse, bool underline);
+//========================TFT180 ×Ô¶¨Òå»ù´¡º¯Êý========================//
 
 #endif

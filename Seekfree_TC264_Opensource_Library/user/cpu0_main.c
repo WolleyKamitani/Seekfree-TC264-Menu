@@ -64,13 +64,13 @@ int core0_main(void)
     {
         // 此处编写需要循环执行的代码
         tft180_set_default_font(TFT180_6X8_FONT);
-        tft180_show_styled_string(STRING_LEFT, 0, 0, "TEST WORD", FALSE, FALSE);
-        tft180_show_styled_string(STRING_CENTER, 0, 10, "TEST WORD", FALSE, TRUE);
-        tft180_show_styled_string(STRING_RIGHT, 0, 20, "TEST WORD", TRUE, FALSE);
+        tft180_show_styled_string(LEFT, 0, 0, "TEST WORD", FALSE, FALSE);
+        tft180_show_styled_string(CENTER, 0, 10, "TEST WORD", FALSE, TRUE);
+        tft180_show_styled_string(RIGHT, 0, 20, "TEST WORD", TRUE, FALSE);
         tft180_set_default_font(TFT180_8X16_FONT);
-        tft180_show_styled_string(STRING_LEFT, 0, 40, "TEST WORD", FALSE, FALSE);
-        tft180_show_styled_string(STRING_CENTER, 0, 60, "TEST WORD", FALSE, TRUE);
-        tft180_show_styled_string(STRING_RIGHT, 0, 80, "TEST WORD", TRUE, FALSE);
+        tft180_show_styled_string(LEFT, 0, 40, "TEST WORD", FALSE, FALSE);
+        tft180_show_styled_string(CENTER, 0, 60, "TEST WORD", FALSE, TRUE);
+        tft180_show_styled_string(RIGHT, 0, 80, "TEST WORD", TRUE, FALSE);
         // 此处编写需要循环执行的代码
     }
 }
