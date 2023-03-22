@@ -77,7 +77,7 @@ menu_page_struct *menu_init_page(const char page_name[])
 void menu_add_page(const char page_name[])
 {
     // 检查是否已存在同名页面
-    zf_assert(menu_search_page(page_name) != NULL);
+    zf_assert(menu_search_page(page_name) == NULL);
 
     // 初始化新菜单页面
     menu_page_struct *new_page = menu_init_page(page_name);
@@ -85,6 +85,7 @@ void menu_add_page(const char page_name[])
     if (menu.last_page == NULL)
     {
         // 如果当前菜单中没有页面，则将新页面设置为第一个页面
+        menu.current_page = new_page;
         menu.first_page = new_page;
         menu.last_page = new_page;
     }
@@ -244,7 +245,7 @@ void menu_show_step(bool reverse, bool underline)
         break;
     }
 
-    tft180_show_styled_string(CENTER, 0, LINE_HEIGHT_OFFSET + SCREEN_HEIGHT_OFFSET, step, reverse, underline);
+    tft180_show_styled_string(CENTER, 0, (LINE_HEIGHT_OFFSET + 8) + SCREEN_HEIGHT_OFFSET, step, reverse, underline);
 }
 
 /**
@@ -258,7 +259,7 @@ void menu_show_item_name(uint8 item_index, bool reverse, bool underline)
 {
     menu_item_struct *item = &menu.current_page->items[item_index];
     tft180_show_styled_string(LEFT, 6,
-                              (2 + item_index) * LINE_HEIGHT_OFFSET + SCREEN_HEIGHT_OFFSET,
+                              (2 + item_index) * (LINE_HEIGHT_OFFSET + 8) + SCREEN_HEIGHT_OFFSET,
                               item->name, reverse, underline);
 }
 
@@ -272,7 +273,7 @@ void menu_show_item_data(uint8 item_index)
     char format_res[DATA_MAX_LEN + 1];
     menu_format_data(format_res, menu.current_page->items[item_index]);
     tft180_show_styled_string(RIGHT, 6,
-                              (2 + item_index) * LINE_HEIGHT_OFFSET + SCREEN_HEIGHT_OFFSET,
+                              (2 + item_index) * (LINE_HEIGHT_OFFSET + 8) + SCREEN_HEIGHT_OFFSET,
                               format_res, FALSE, FALSE);
 }
 
@@ -314,13 +315,17 @@ void menu_refresh_item(int8 item_index)
     switch (item_index)
     {
     case PAGE_ITEM:
-        menu_show_title(menu.item_activated, !menu.item_activated);
+        menu_show_title(menu.item_index == PAGE_ITEM ? menu.item_activated : FALSE,
+                        menu.item_index == PAGE_ITEM ? !menu.item_activated : FALSE);
         break;
     case STEP_ITEM:
-        menu_show_step(menu.item_activated, !menu.item_activated);
+        menu_show_step(menu.item_index == STEP_ITEM ? menu.item_activated : FALSE,
+                       menu.item_index == STEP_ITEM ? !menu.item_activated : FALSE);
         break;
     default:
-        menu_show_item_name(item_index, menu.item_activated, !menu.item_activated);
+        menu_show_item_name(item_index,
+                            menu.item_index == item_index ? menu.item_activated : FALSE,
+                            menu.item_index == item_index ? !menu.item_activated : FALSE);
         break;
     }
 }
@@ -376,7 +381,7 @@ void menu_turn_page(navigation_enum direction)
     if (last_page != menu.current_page)
     {
         menu.item_index = menu.item_index == PAGE_ITEM ? PAGE_ITEM : 0;
-        menu_refresh();
+        menu_repaint();
     }
 }
 
@@ -424,8 +429,8 @@ void menu_activate_item(void)
 void menu_adjust_step(plus_minus_enum direction)
 {
     menu.step_size = direction == MINUS
-                         ? (menu.step_size == STEP_1 ? STEP_100 : menu.step_size - 1)
-                         : (menu.step_size == STEP_100 ? STEP_1 : menu.step_size + 1);
+                         ? (menu.step_size == STEP_0_01 ? STEP_100 : (menu.step_size - 1))
+                         : (menu.step_size == STEP_100 ? STEP_0_01 : (menu.step_size + 1));
 
     if (menu.item_index == STEP_ITEM)
     {
@@ -501,6 +506,49 @@ void menu_adjust_data(plus_minus_enum direction)
         menu_show_item_data(menu.item_index);
         break;
     }
+    }
+}
+
+/**
+ * @brief 菜单导航操作
+ *
+ * @param direction 导航方向 参照 common.h 中的 navigation_enum
+ * @param long_press 是否长按
+ */
+void menu_navigation_action(navigation_enum direction, bool long_press)
+{
+    if (!long_press)
+    {
+        if (!menu.item_activated)
+        {
+            menu_turn_item(direction);
+        }
+        else
+        {
+            switch (menu.item_index)
+            {
+            case PAGE_ITEM:
+                menu_turn_page(direction);
+                break;
+            case STEP_ITEM:
+                menu_adjust_step((plus_minus_enum)direction);
+                break;
+            default:
+                menu_adjust_data((plus_minus_enum)direction);
+                break;
+            }
+        }
+    }
+    else
+    {
+        if (!menu.item_activated)
+        {
+            menu_turn_page(direction);
+        }
+        else
+        {
+            menu_adjust_step((plus_minus_enum)direction);
+        }
     }
 }
 

@@ -6,51 +6,79 @@
  */
 void key_action(void)
 {
-    switch (key_get_state(KEY_1))
+    static key_state_enum last_key_state[KEY_NUMBER] = {KEY_RELEASE};
+    key_state_enum key_state[KEY_NUMBER] = {key_get_state(KEY_1),
+                                            key_get_state(KEY_2),
+                                            key_get_state(KEY_3),
+                                            key_get_state(KEY_4)};
+
+    if (key_state[KEY_1] == KEY_RELEASE)
     {
-    case KEY_RELEASE:
-        break;
-    case KEY_CHECK_SHOCK:
-        break;
-    case KEY_SHORT_PRESS:
-        break;
-    case KEY_LONG_PRESS:
-        break;
+        switch (last_key_state[KEY_1])
+        {
+        case KEY_RELEASE:
+            break;
+        case KEY_CHECK_SHOCK:
+            break;
+        case KEY_SHORT_PRESS:
+            break;
+        case KEY_LONG_PRESS:
+            break;
+        }
     }
 
-    switch (key_get_state(KEY_2))
+    if (key_state[KEY_2] == KEY_RELEASE)
     {
-    case KEY_RELEASE:
-        break;
-    case KEY_CHECK_SHOCK:
-        break;
-    case KEY_SHORT_PRESS:
-        break;
-    case KEY_LONG_PRESS:
-        break;
+        switch (last_key_state[KEY_2])
+        {
+        case KEY_RELEASE:
+            break;
+        case KEY_CHECK_SHOCK:
+            break;
+        case KEY_SHORT_PRESS:
+            menu_activate_item();
+            break;
+        case KEY_LONG_PRESS:
+            break;
+        }
     }
 
-    switch (key_get_state(KEY_3))
+    if (key_state[KEY_3] == KEY_RELEASE)
     {
-    case KEY_RELEASE:
-        break;
-    case KEY_CHECK_SHOCK:
-        break;
-    case KEY_SHORT_PRESS:
-        break;
-    case KEY_LONG_PRESS:
-        break;
+        switch (last_key_state[KEY_3])
+        {
+        case KEY_RELEASE:
+            break;
+        case KEY_CHECK_SHOCK:
+            break;
+        case KEY_SHORT_PRESS:
+            menu_navigation_action(PREV, FALSE);
+            break;
+        case KEY_LONG_PRESS:
+            menu_navigation_action(PREV, TRUE);
+            break;
+        }
     }
 
-    switch (key_get_state(KEY_4))
+    if (key_state[KEY_4] == KEY_RELEASE)
     {
-    case KEY_RELEASE:
-        break;
-    case KEY_CHECK_SHOCK:
-        break;
-    case KEY_SHORT_PRESS:
-        break;
-    case KEY_LONG_PRESS:
-        break;
+        switch (last_key_state[KEY_4])
+        {
+        case KEY_RELEASE:
+            break;
+        case KEY_CHECK_SHOCK:
+            break;
+        case KEY_SHORT_PRESS:
+            menu_navigation_action(NEXT, FALSE);
+            break;
+        case KEY_LONG_PRESS:
+            menu_navigation_action(NEXT, TRUE);
+            break;
+        }
+    }
+
+    for (uint8_t i = 0; i < KEY_NUMBER; i++)
+    {
+        last_key_state[i] = key_state[i];
     }
 }

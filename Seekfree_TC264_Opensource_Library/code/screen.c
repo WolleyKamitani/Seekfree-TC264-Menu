@@ -41,6 +41,23 @@ void tft180_set_default_dir(tft180_dir_enum dir)
 void tft180_set_default_font(tft180_font_size_enum font)
 {
     tft180_display_font = font;
+
+    switch (font)
+    {
+    case TFT180_6X8_FONT:
+        tft180_char_width = 6;
+        tft180_char_height = 8;
+        break;
+    case TFT180_8X16_FONT:
+        tft180_char_width = 8;
+        tft180_char_height = 16;
+        break;
+    case TFT180_16X16_FONT:
+        tft180_char_width = 16;
+        tft180_char_height = 16;
+        break;
+    }
+
     tft180_set_font(font);
 }
 
@@ -76,14 +93,11 @@ void tft180_show_styled_char(uint16 x, uint16 y, const char dat, bool reverse, b
     tft180_show_char(x, y, dat);
     tft180_set_color(tft180_pencolor, tft180_bgcolor);
 
-    if (underline)
-    {
-        tft180_draw_line(x,
-                         y + tft180_char_height,
-                         x + tft180_char_width,
-                         y + tft180_char_height,
-                         tft180_pencolor);
-    }
+    tft180_draw_line(x,
+                     y + tft180_char_height,
+                     x + tft180_char_width,
+                     y + tft180_char_height,
+                     underline ? tft180_pencolor : tft180_bgcolor);
 }
 
 /**

@@ -72,11 +72,8 @@ typedef struct menu
 //========================菜单参数结构体========================//
 
 //========================菜单基础函数========================//
-void menu_turn_page(navigation_enum direction);
-void menu_turn_item(navigation_enum direction);
 void menu_activate_item(void);
-void menu_adjust_step(plus_minus_enum direction);
-void menu_adjust_data(plus_minus_enum direction);
+void menu_navigation_action(navigation_enum direction, bool long_press);
 void menu_init(void);
 void menu_refresh(void);
 //========================菜单基础函数========================//

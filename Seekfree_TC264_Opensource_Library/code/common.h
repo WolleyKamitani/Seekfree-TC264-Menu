@@ -19,8 +19,8 @@ typedef enum
 
 typedef enum
 {
-    MINUS,
     PLUS,
+    MINUS,
 } plus_minus_enum;
 //========================实用参数结构体========================//
 

@@ -4,4 +4,6 @@
 #include "zf_common_headfile.h"
 #include "menu.h"
 
+void key_action(void);
+
 #endif
