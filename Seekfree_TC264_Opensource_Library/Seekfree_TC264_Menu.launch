@@ -40,10 +40,10 @@
     <booleanAttribute key="org.eclipse.cdt.launch.DEBUGGER_STOP_AT_MAIN" value="false"/>
     <booleanAttribute key="org.eclipse.cdt.launch.ENABLE_REGISTER_BOOKKEEPING" value="false"/>
     <booleanAttribute key="org.eclipse.cdt.launch.ENABLE_VARIABLE_BOOKKEEPING" value="false"/>
-    <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="${build_config}\Seekfree_TC264_Opensource_Library.elf"/>
-    <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="Seekfree_TC264_Opensource_Library"/>
+    <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="${build_config}/Seekfree_TC264_Menu.elf"/>
+    <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="Seekfree_TC264_Menu"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/Seekfree_TC264_Opensource_Library"/>
+        <listEntry value="/Seekfree_TC264_Menu"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="4"/>

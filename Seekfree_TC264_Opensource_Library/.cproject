@@ -190,6 +190,14 @@
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="com.tasking.flash.settings"/>
+			<storageModule moduleId="com.infineon.aurix.buildsystem.build.booster.settings">
+				<never-exclude-from-build>
+					<path>/Libraries/iLLD/TC26B/Tricore/Cpu/Trap</path>
+					<path>/Configurations/Debug</path>
+					<path>/Libraries/iLLD/TC26B/Tricore/Cpu/CStart</path>
+					<path>/Configurations</path>
+				</never-exclude-from-build>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.infineon.aurix.buildsystem.managed.configuration.binary.release.303972758">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.infineon.aurix.buildsystem.managed.configuration.binary.release.303972758" moduleId="org.eclipse.cdt.core.settings" name="Release">
@@ -504,6 +512,14 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="com.infineon.aurix.buildsystem.build.booster.settings">
+				<never-exclude-from-build>
+					<path>/Libraries/iLLD/TC26B/Tricore/Cpu/Trap</path>
+					<path>/Configurations/Debug</path>
+					<path>/Libraries/iLLD/TC26B/Tricore/Cpu/CStart</path>
+					<path>/Configurations</path>
+				</never-exclude-from-build>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.infineon.aurix.buildsystem.managed.external.gcc.configuration.debug.56824320">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.infineon.aurix.buildsystem.managed.external.gcc.configuration.debug.56824320" moduleId="org.eclipse.cdt.core.settings" name="External GCC - Debug">
@@ -828,6 +844,14 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="com.infineon.aurix.buildsystem.build.booster.settings">
+				<never-exclude-from-build>
+					<path>/Libraries/iLLD/TC26B/Tricore/Cpu/Trap</path>
+					<path>/Configurations/Debug</path>
+					<path>/Libraries/iLLD/TC26B/Tricore/Cpu/CStart</path>
+					<path>/Configurations</path>
+				</never-exclude-from-build>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.infineon.aurix.buildsystem.managed.external.gcc.configuration.release.653421753">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.infineon.aurix.buildsystem.managed.external.gcc.configuration.release.653421753" moduleId="org.eclipse.cdt.core.settings" name="External GCC - Release">
@@ -1152,6 +1176,14 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="com.infineon.aurix.buildsystem.build.booster.settings">
+				<never-exclude-from-build>
+					<path>/Libraries/iLLD/TC26B/Tricore/Cpu/Trap</path>
+					<path>/Configurations/Debug</path>
+					<path>/Libraries/iLLD/TC26B/Tricore/Cpu/CStart</path>
+					<path>/Configurations</path>
+				</never-exclude-from-build>
+			</storageModule>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
