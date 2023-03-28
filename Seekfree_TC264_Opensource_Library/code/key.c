@@ -1,84 +1,36 @@
 #include "key.h"
 
+typedef void (*key_action_func)(void);
+
 /**
  * @brief 按键对应动作 按需求自行修改
+ *        从左到右依次对应按键释放 消抖 短按和长按状态 填写函数需要是没有参数的函数
  *
  */
-void key_action(void)
+static key_action_func key_actions[KEY_NUMBER][4] = {
+    {NULL, NULL, NULL, NULL},
+    {NULL, NULL, menu_activate_item, NULL},
+    {NULL, NULL, menu_short_press_prev_navigation, menu_long_press_prev_navigation},
+    {NULL, NULL, menu_short_press_next_navigation, menu_long_press_next_navigation},
+};
+
+/**
+ * @brief 按键执行动作
+ *        按键数目和对应引脚在 zf_device_key.h 内修改
+ *
+ */
+void key_perform_action(void)
 {
     static key_state_enum last_key_state[KEY_NUMBER] = {KEY_RELEASE};
-    key_state_enum key_state[KEY_NUMBER] = {key_get_state(KEY_1),
-                                            key_get_state(KEY_2),
-                                            key_get_state(KEY_3),
-                                            key_get_state(KEY_4)};
+    key_state_enum key_state[KEY_NUMBER];
 
-    if (key_state[KEY_1] == KEY_RELEASE)
+    for (uint8 i = 0; i < KEY_NUMBER; i++)
     {
-        switch (last_key_state[KEY_1])
+        key_state[i] = key_get_state(i);
+        if (key_state[i] != last_key_state[i])
         {
-        case KEY_RELEASE:
-            break;
-        case KEY_CHECK_SHOCK:
-            break;
-        case KEY_SHORT_PRESS:
-            break;
-        case KEY_LONG_PRESS:
-            break;
+            key_actions[i][last_key_state[i]]();
         }
-    }
-
-    if (key_state[KEY_2] == KEY_RELEASE)
-    {
-        switch (last_key_state[KEY_2])
-        {
-        case KEY_RELEASE:
-            break;
-        case KEY_CHECK_SHOCK:
-            break;
-        case KEY_SHORT_PRESS:
-            menu_activate_item();
-            break;
-        case KEY_LONG_PRESS:
-            break;
-        }
-    }
-
-    if (key_state[KEY_3] == KEY_RELEASE)
-    {
-        switch (last_key_state[KEY_3])
-        {
-        case KEY_RELEASE:
-            break;
-        case KEY_CHECK_SHOCK:
-            break;
-        case KEY_SHORT_PRESS:
-            menu_navigation_action(PREV, FALSE);
-            break;
-        case KEY_LONG_PRESS:
-            menu_navigation_action(PREV, TRUE);
-            break;
-        }
-    }
-
-    if (key_state[KEY_4] == KEY_RELEASE)
-    {
-        switch (last_key_state[KEY_4])
-        {
-        case KEY_RELEASE:
-            break;
-        case KEY_CHECK_SHOCK:
-            break;
-        case KEY_SHORT_PRESS:
-            menu_navigation_action(NEXT, FALSE);
-            break;
-        case KEY_LONG_PRESS:
-            menu_navigation_action(NEXT, TRUE);
-            break;
-        }
-    }
-
-    for (uint8_t i = 0; i < KEY_NUMBER; i++)
-    {
         last_key_state[i] = key_state[i];
     }
 }

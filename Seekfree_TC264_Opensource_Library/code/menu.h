@@ -73,7 +73,11 @@ typedef struct menu
 
 //========================菜单基础函数========================//
 void menu_activate_item(void);
-void menu_navigation_action(navigation_enum direction, bool long_press);
+void menu_navigation_action(navigation_enum direction, key_state_enum key_state);
+void menu_short_press_prev_navigation(void);
+void menu_short_press_next_navigation(void);
+void menu_long_press_prev_navigation(void);
+void menu_long_press_next_navigation(void);
 void menu_init(void);
 void menu_refresh(void);
 //========================菜单基础函数========================//

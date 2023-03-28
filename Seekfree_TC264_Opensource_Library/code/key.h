@@ -4,6 +4,8 @@
 #include "zf_common_headfile.h"
 #include "menu.h"
 
-void key_action(void);
+//========================按键基础函数========================//
+void key_perform_action(void);
+//========================按键基础函数========================//
 
 #endif
