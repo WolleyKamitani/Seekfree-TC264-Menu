@@ -49,9 +49,9 @@
 #include "zf_common_typedef.h"
 
 //===============================================GPS 驱动配置====================================================
-#define GPS_TAU1201_UART    (UART_2)
-#define GPS_TAU1201_RX      (UART2_TX_P10_5)                                    // GPS RX引脚连接到单片机此
-#define GPS_TAU1201_TX      (UART2_RX_P10_6)                                    // GPS TX串口引脚
+#define GPS_TAU1201_UART    (UART_3)
+#define GPS_TAU1201_RX      (UART3_TX_P15_6)                                    // GPS RX引脚连接到单片机此
+#define GPS_TAU1201_TX      (UART3_RX_P15_7)                                    // GPS TX串口引脚
 //===============================================GPS 驱动配置====================================================
 
 #define ANGLE_TO_RAD(x)    ((x) * PI / 180.0)                                   // 角度转换为弧度

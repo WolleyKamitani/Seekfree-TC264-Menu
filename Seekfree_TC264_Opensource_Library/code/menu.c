@@ -513,13 +513,14 @@ void menu_adjust_data(plus_minus_enum direction)
  * @brief 菜单导航操作
  *
  * @param direction 导航方向 参照 common.h 中的 navigation_enum
- * @param key_state 按键状态 参照 zf_device_key.h 中的 key_state_enum
+ * @param global 是否是全局操作
+ *               当未激活菜单项时，全局操作会切换页面
+ *               当已激活菜单项时，全局操作会切换调节步长
  */
-void menu_navigation_action(navigation_enum direction, key_state_enum key_state)
+void menu_navigation_action(navigation_enum direction, bool global)
 {
-    switch (key_state)
+    if (!global)
     {
-    case KEY_SHORT_PRESS:
         if (!menu.item_activated)
         {
             menu_turn_item(direction);
@@ -539,9 +540,9 @@ void menu_navigation_action(navigation_enum direction, key_state_enum key_state)
                 break;
             }
         }
-        break;
-
-    case KEY_LONG_PRESS:
+    }
+    else
+    {
         if (!menu.item_activated)
         {
             menu_turn_page(direction);
@@ -550,22 +551,8 @@ void menu_navigation_action(navigation_enum direction, key_state_enum key_state)
         {
             menu_adjust_step((plus_minus_enum)direction);
         }
-        break;
-
-    default:
-        break;
     }
 }
-
-/**
- * @brief 菜单导航操作延伸函数
- *        由于按键动作的参数只能是 void，所以需要这些函数来进行调用
- *
- */
-void menu_short_press_prev_navigation(void) { menu_navigation_action(PREV, KEY_SHORT_PRESS); }
-void menu_short_press_next_navigation(void) { menu_navigation_action(NEXT, KEY_SHORT_PRESS); }
-void menu_long_press_prev_navigation(void) { menu_navigation_action(PREV, KEY_LONG_PRESS); }
-void menu_long_press_next_navigation(void) { menu_navigation_action(NEXT, KEY_LONG_PRESS); }
 
 //========================临时测试数据========================//
 int8 int8_test = 123;
@@ -584,6 +571,7 @@ void drawsmile() { tft180_show_styled_string(CENTER, 0, 150, ":)", FALSE, FALSE)
 
 /**
  * @brief 菜单初始化
+ *        使用时根据需要自行修改
  *
  */
 void menu_init(void)

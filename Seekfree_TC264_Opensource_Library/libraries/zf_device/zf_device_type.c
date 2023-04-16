@@ -66,10 +66,10 @@ static void type_default_callback (void)
 void set_camera_type (camera_type_enum type_set, callback_function vsync_callback, callback_function dma_callback, callback_function uart_callback)
 {
     camera_type = type_set;
-    if(vsync_callback == NULL)  camera_dma_handler      = type_default_callback;
-    else                        camera_dma_handler      = dma_callback;
-    if(dma_callback == NULL)    camera_vsync_handler    = type_default_callback;
+    if(vsync_callback == NULL)  camera_vsync_handler    = type_default_callback;
     else                        camera_vsync_handler    = vsync_callback;
+    if(dma_callback == NULL)    camera_dma_handler      = type_default_callback;
+    else                        camera_dma_handler      = dma_callback;
     if(uart_callback == NULL)   camera_uart_handler     = type_default_callback;
     else                        camera_uart_handler     = uart_callback;
 }

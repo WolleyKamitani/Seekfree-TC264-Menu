@@ -1,36 +1,241 @@
 #include "key.h"
 
-typedef void (*key_action_func)(void);
+static key_struct key_list[KEY_NUMBER];               // °´¼üÁĞ±í
+static gpio_pin_enum key_pins[KEY_NUMBER] = KEY_PINS; // °´¼ü¶ÔÓ¦Òı½Å
+static uint8 timer = 0;                               // °´¼üÉ¨Ãè¼ä¸ô
 
 /**
- * @brief æŒ‰é”®å¯¹åº”åŠ¨ä½œ æŒ‰éœ€æ±‚è‡ªè¡Œä¿®æ”¹
- *        ä»å·¦åˆ°å³ä¾æ¬¡å¯¹åº”æŒ‰é”®é‡Šæ”¾ æ¶ˆæŠ– çŸ­æŒ‰å’Œé•¿æŒ‰çŠ¶æ€ å¡«å†™å‡½æ•°éœ€è¦æ˜¯æ²¡æœ‰å‚æ•°çš„å‡½æ•°
+ * @brief °´¼ü×´Ì¬¼ì²â
  *
  */
-static key_action_func key_actions[KEY_NUMBER][4] = {
-    {NULL, NULL, NULL, NULL},
-    {NULL, NULL, menu_activate_item, NULL},
-    {NULL, NULL, menu_short_press_prev_navigation, menu_long_press_prev_navigation},
-    {NULL, NULL, menu_short_press_next_navigation, menu_long_press_next_navigation},
-};
-
-/**
- * @brief æŒ‰é”®æ‰§è¡ŒåŠ¨ä½œ
- *        æŒ‰é”®æ•°ç›®å’Œå¯¹åº”å¼•è„šåœ¨ zf_device_key.h å†…ä¿®æ”¹
- *
- */
-void key_perform_action(void)
+void key_handler(void)
 {
-    static key_state_enum last_key_state[KEY_NUMBER] = {KEY_RELEASE};
-    key_state_enum key_state[KEY_NUMBER];
+    // ±éÀú°´¼üÁĞ±í
+    for (uint8 i = 0; i < KEY_NUMBER; i++)
+    {
+        // ¸üĞÂ°´¼ü×´Ì¬
+        key_list[i].value = !gpio_get_level(key_pins[i]); // »ñÈ¡µ±Ç°°´¼ü×´Ì¬£¨·­×ª£¬ÒòÎªµÍµçÆ½±íÊ¾°´ÏÂ£©
+        key_list[i].last_value = key_list[i].value;       // ´æ´¢µ±Ç°°´¼ü×´Ì¬
+
+        // °´¼üËÉ¿ªÊ±£¬³¤°´¼ÆÊ±ÇåÁã
+        if (!key_list[i].value && key_list[i].state != DITHER && key_list[i].state != HOLD)
+        {
+            key_list[i].hold_time = 0;
+        }
+
+        // °´¼ü³ÖĞø°´ÏÂÊ±£¬³¤°´¼ÆÊ±ÀÛ¼Ó
+        if (key_list[i].value && key_list[i].last_value)
+        {
+            key_list[i].hold_time += timer;
+        }
+
+        // µ±°´¼ü´¦ÓÚ PRE_CLICK »ò IN_CLICK ×´Ì¬Ê±£¬¼ä¸ô¼ÆÊ±ÀÛ¼Ó
+        if (key_list[i].state == PRE_CLICK || key_list[i].state == IN_CLICK)
+        {
+            key_list[i].interval_time += timer;
+        }
+        else
+        {
+            key_list[i].interval_time = 0;
+        }
+
+        // °´¼ü×´Ì¬»ú
+        switch (key_list[i].state)
+        {
+        case RELEASE:
+            // Çå³ı°´¼ü×´Ì¬
+            key_list[i].is_press = FALSE;
+            key_list[i].is_hold = FALSE;
+            key_list[i].is_multi = FALSE;
+            key_list[i].click_count = 0;
+
+            // Èç¹û´ËÊ±°´Å¥ÈÔ´¦ÓÚ°´ÏÂ×´Ì¬£¬Ôò½øÈë DITHER ×´Ì¬
+            if (key_list[i].value)
+            {
+                key_list[i].state = DITHER;
+            }
+
+            break;
+        case DITHER:
+            // Èç¹û°´¼ü³ÖĞøÊ±¼ä³¬¹ıãĞÖµ£¬½øÈë HOLD ×´Ì¬
+            if (key_list[i].hold_time > HOLD_THRESHOLD)
+            {
+                key_list[i].state = HOLD;
+            }
+
+            // Èç¹û°´¼üÊÍ·ÅÇÒ°´ÏÂÊ±¼ä´óÓÚ PRESS_THRESHOLD ÇÒĞ¡ÓÚ HOLD_THRESHOLD£¬Ôò½øÈë PRE_CLICK ×´Ì¬²¢Ôö¼Óµã»÷´ÎÊı
+            if (!key_list[i].value)
+            {
+                if (key_list[i].hold_time > PRESS_THRESHOLD && key_list[i].hold_time < HOLD_THRESHOLD)
+                {
+                    key_list[i].state = PRE_CLICK;
+                    key_list[i].click_count++;
+                }
+                else
+                {
+                    key_list[i].state = RELEASE;
+                }
+            }
+
+            break;
+        case PRE_CLICK:
+            // Èç¹û°´¼ü¼ä¸ôÊ±¼äĞ¡ÓÚãĞÖµÇÒ°´¼ü°´ÏÂÊ±¼ä´óÓÚ PRESS_THRESHOLD£¬Ôò½øÈë MULTI ×´Ì¬²¢Ôö¼Óµã»÷´ÎÊı
+            if (key_list[i].interval_time < INTERVAL_THRESHOLD)
+            {
+                if (key_list[i].hold_time > PRESS_THRESHOLD)
+                {
+                    key_list[i].state = MULTI;
+                    key_list[i].click_count++;
+                }
+                break;
+            }
+
+            // ·ñÔò£¬½øÈë PRESS ×´Ì¬
+            key_list[i].state = PRESS;
+            break;
+        case IN_CLICK:
+            // Èç¹û°´¼ü¼ä¸ôÊ±¼äĞ¡ÓÚãĞÖµÇÒ°´¼ü°´ÏÂÊ±¼ä´óÓÚ PRESS_THRESHOLD£¬Ôò½øÈë MULTI ×´Ì¬²¢Ôö¼Óµã»÷´ÎÊı
+            if (key_list[i].interval_time < INTERVAL_THRESHOLD)
+            {
+                if (key_list[i].hold_time > PRESS_THRESHOLD)
+                {
+                    key_list[i].state = MULTI;
+                    key_list[i].click_count++;
+                }
+            }
+            else
+            {
+                // Èç¹û°´¼ü¼ä¸ôÊ±¼ä³¬¹ıãĞÖµ£¬ÉèÖÃ is_multi ÎªÕæ£¬²¢·µ»Ø RELEASE ×´Ì¬
+                key_list[i].is_multi = TRUE;
+                key_list[i].state = RELEASE;
+            }
+
+            break;
+        case PRESS:
+            // ÉèÖÃ is_press ÎªÕæ
+            key_list[i].is_press = TRUE;
+
+            // Èç¹û°´¼üÊÍ·Å£¬½øÈë RELEASE ×´Ì¬
+            if (!key_list[i].value)
+            {
+                key_list[i].state = RELEASE;
+            }
+
+            break;
+        case HOLD:
+            // µ±°´¼üÊÍ·ÅÊ±£¬ÉèÖÃ is_hold ÎªÕæ£¬²¢·µ»Ø RELEASE ×´Ì¬
+            if (!key_list[i].value)
+            {
+                key_list[i].is_hold = TRUE;
+                key_list[i].state = RELEASE;
+            }
+
+            break;
+        case MULTI:
+            // Èç¹û°´¼üÊÍ·Å£¬½øÈë IN_CLICK ×´Ì¬
+            if (!key_list[i].value)
+            {
+                key_list[i].state = IN_CLICK;
+            }
+
+            break;
+        }
+    }
+
+    // Ö´ĞĞ°´¼ü¶¯×÷
+    key_action();
+}
+
+/**
+ * @brief °´¼üÖ´ĞĞ¶¯×÷
+ *        Ê¹ÓÃÊ±¸ù¾İĞèÒª×ÔĞĞĞŞ¸Ä
+ *
+ */
+void key_action(void)
+{
+    for (uint8 i = 0; i < KEY_NUMBER; i++)
+    {
+        if (key_list[i].is_press) // °´¼ü¶Ì°´¶ÔÓ¦¶¯×÷
+        {
+            switch (i)
+            {
+            case 0:
+                break;
+            case 1:
+                menu_activate_item();
+                break;
+            case 2:
+                menu_navigation_action(PREV, FALSE);
+                break;
+            case 3:
+                menu_navigation_action(NEXT, FALSE);
+                break;
+            default:
+                break;
+            }
+        }
+
+        if (key_list[i].is_hold) // °´¼ü³¤°´¶ÔÓ¦¶¯×÷
+        {
+            switch (i)
+            {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                menu_navigation_action(PREV, TRUE);
+                break;
+            case 3:
+                menu_navigation_action(NEXT, TRUE);
+                break;
+            default:
+                break;
+            }
+        }
+
+        if (key_list[i].is_multi) // °´¼üË«»÷¶ÔÓ¦¶¯×÷
+        {
+            switch (i)
+            {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                break;
+            }
+        }
+    }
+}
+
+/**
+ * @brief °´¼üÁĞ±í³õÊ¼»¯
+ *
+ * @param pit_timer °´¼üÉ¨Ãè¶ÔÓ¦µÄ PIT ¶¨Ê±Æ÷ÖÜÆÚ
+ */
+void key_list_init(uint8 pit_timer)
+{
+    timer = pit_timer;
 
     for (uint8 i = 0; i < KEY_NUMBER; i++)
     {
-        key_state[i] = key_get_state(i);
-        if (key_state[i] != last_key_state[i])
-        {
-            key_actions[i][last_key_state[i]]();
-        }
-        last_key_state[i] = key_state[i];
+        // ³õÊ¼»¯°´¼ü½á¹¹Ìå
+        key_list[i].value = 0;
+        key_list[i].last_value = 0;
+        key_list[i].hold_time = 0;
+        key_list[i].interval_time = 0;
+        key_list[i].click_count = 0;
+        key_list[i].state = RELEASE;
+        key_list[i].is_press = FALSE;
+        key_list[i].is_hold = FALSE;
+        key_list[i].is_multi = FALSE;
+
+        // ³õÊ¼»¯°´¼ü¶ÔÓ¦µÄ GPIO
+        gpio_init(key_pins[i], GPI, 0, GPI_PULL_UP);
     }
 }

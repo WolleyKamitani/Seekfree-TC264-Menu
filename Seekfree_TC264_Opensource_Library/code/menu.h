@@ -4,6 +4,7 @@
 #include "zf_common_headfile.h"
 #include "common.h"
 #include "screen.h"
+#include "key.h"
 
 #define PAGE_MAX_NAME_LEN 16 // 菜单页面名称最大长度
 #define ITEM_MAX_NAME_LEN 12 // 菜单项名称最大长度
@@ -73,11 +74,7 @@ typedef struct menu
 
 //========================菜单基础函数========================//
 void menu_activate_item(void);
-void menu_navigation_action(navigation_enum direction, key_state_enum key_state);
-void menu_short_press_prev_navigation(void);
-void menu_short_press_next_navigation(void);
-void menu_long_press_prev_navigation(void);
-void menu_long_press_next_navigation(void);
+void menu_navigation_action(navigation_enum direction, bool global);
 void menu_init(void);
 void menu_refresh(void);
 //========================菜单基础函数========================//

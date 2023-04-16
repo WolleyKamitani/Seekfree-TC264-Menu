@@ -37,12 +37,14 @@
 #include "Ifxstm.h"
 #include "Cpu0_Main.h"
 #include "Cpu/Std/IfxCpu.h"
+#include "zf_driver_delay.h"
 #include "zf_common_interrupt.h"
 #include "zf_common_clock.h"
 
+
 App_Cpu0 g_AppCpu0;                               // 频率信息变量
 
-IFX_ALIGN(4) IfxCpu_syncEvent g_cpuSyncEvent = 0; // 事件同步变量
+static uint8 cpu_init_finsh[IfxCpu_Id_none];      // 核心初始化完成标志位
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介          设置系统频率
@@ -106,8 +108,20 @@ void clock_init (void)
 //-------------------------------------------------------------------------------------------------------------------
 void cpu_wait_event_ready (void)
 {
-    while(IfxCpu_waitEvent(&g_cpuSyncEvent, 5))
+    uint8 i;
+    uint8 all_cpu_init_finsh;
+
+    // 调用此函数的核心初始化完毕，标志位置一
+    cpu_init_finsh[IfxCpu_getCoreId()] = 1;
+
+    // 等待其他核心初始化完毕
+    do
     {
-        IfxCpu_emitEvent(&g_cpuSyncEvent);
-    }
+        all_cpu_init_finsh = 1;
+        for(i = 0; i < IfxCpu_Id_none; i++)
+        {
+            all_cpu_init_finsh *= cpu_init_finsh[i];
+        }
+        system_delay_ms(1);
+    }while(0 == all_cpu_init_finsh);
 }

@@ -53,9 +53,7 @@ typedef enum
     NO_WIRELESS = 0,                                                            // 无设备
     WIRELESS_UART,                                                              // 无线串口
     BLUETOOTH_CH9141,                                                           // 蓝牙 CH9141
-    GPS_TAU1201,
-    WIFI_UART,
-    WIFI_SPI,
+    WIFI_UART,                                                                  // 串口 WiFi
 }wireless_type_enum;
 //==============================================定义 外设 枚举体==================================================
 

@@ -56,8 +56,8 @@ int core0_main(void)
     debug_init(); // 初始化默认调试串口
     // 此处编写用户代码 例如外设初始化代码等
 
-    pit_ms_init(CCU60_CH0, 10); // 10ms PIT中断 用于按键扫描
-    key_init(10);               // 按键初始化 10ms扫描一次
+    pit_ms_init(CCU60_CH0, 10); // 1ms PIT中断 用于按键扫描
+    key_list_init(10);          // 按键初始化 timer 参数应与中断周期一致
     tft180_init();              // 屏幕初始化
     menu_init();                // 菜单初始化
 

@@ -70,8 +70,7 @@ void spi_mux (spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enum 
             if      (SPI0_MISO_P20_12 == miso_pin)  set_pin->mrst = &IfxQspi0_MRSTA_P20_12_IN;
             else    zf_assert(FALSE);
 
-            if      (SPI0_CS0_P20_8   == cs_pin ||
-                          SPI_CS_NULL == cs_pin)    set_cs->pin   = &IfxQspi0_SLSO0_P20_8_OUT;
+            if      (SPI0_CS0_P20_8   == cs_pin)    set_cs->pin   = &IfxQspi0_SLSO0_P20_8_OUT;
             else if (SPI0_CS1_P20_9   == cs_pin)    set_cs->pin   = &IfxQspi0_SLSO1_P20_9_OUT;
             else if (SPI0_CS2_P20_13  == cs_pin)    set_cs->pin   = &IfxQspi0_SLSO2_P20_13_OUT;
             else if (SPI0_CS3_P11_10  == cs_pin)    set_cs->pin   = &IfxQspi0_SLSO3_P11_10_OUT;
@@ -82,6 +81,7 @@ void spi_mux (spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enum 
             else if (SPI0_CS8_P20_6   == cs_pin)    set_cs->pin   = &IfxQspi0_SLSO8_P20_6_OUT;
             else if (SPI0_CS9_P20_3   == cs_pin)    set_cs->pin   = &IfxQspi0_SLSO9_P20_3_OUT;
             else if (SPI0_CS13_P15_0  == cs_pin)    set_cs->pin   = &IfxQspi0_SLSO13_P15_0_OUT;
+            else if (SPI_CS_NULL      == cs_pin)    set_cs->pin   = NULL_PTR;
             else    zf_assert(FALSE);
 
         }break;
@@ -101,8 +101,7 @@ void spi_mux (spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enum 
             else if (SPI1_MISO_P11_3  == miso_pin)  set_pin->mrst = &IfxQspi1_MRSTB_P11_3_IN;
             else    zf_assert(FALSE);
 
-            if      (SPI1_CS0_P20_8   == cs_pin  ||
-                         SPI_CS_NULL  == cs_pin)    set_cs->pin   = &IfxQspi1_SLSO0_P20_8_OUT;
+            if      (SPI1_CS0_P20_8   == cs_pin )   set_cs->pin   = &IfxQspi1_SLSO0_P20_8_OUT;
             else if (SPI1_CS1_P20_9   == cs_pin )   set_cs->pin   = &IfxQspi1_SLSO1_P20_9_OUT;
             else if (SPI1_CS2_P20_13  == cs_pin )   set_cs->pin   = &IfxQspi1_SLSO2_P20_13_OUT;
             else if (SPI1_CS3_P11_10  == cs_pin )   set_cs->pin   = &IfxQspi1_SLSO3_P11_10_OUT;
@@ -112,6 +111,7 @@ void spi_mux (spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enum 
             else if (SPI1_CS7_P33_5   == cs_pin )   set_cs->pin   = &IfxQspi1_SLSO7_P33_5_OUT;
             else if (SPI1_CS8_P10_4   == cs_pin )   set_cs->pin   = &IfxQspi1_SLSO8_P10_4_OUT;
             else if (SPI1_CS9_P10_5   == cs_pin )   set_cs->pin   = &IfxQspi1_SLSO9_P10_5_OUT;
+            else if (SPI_CS_NULL      == cs_pin)    set_cs->pin   = NULL_PTR;
             else    zf_assert(FALSE);
         }break;
 
@@ -136,8 +136,7 @@ void spi_mux (spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enum 
             else if (SPI2_MISO_P21_3  == miso_pin)  set_pin->mrst = &IfxQspi2_MRSTCP_P21_3_IN;
             else    zf_assert(FALSE);
 
-            if      (SPI2_CS0_P15_2   == cs_pin ||
-                          SPI_CS_NULL == cs_pin)    set_cs->pin   = &IfxQspi2_SLSO0_P15_2_OUT;
+            if      (SPI2_CS0_P15_2   == cs_pin)    set_cs->pin   = &IfxQspi2_SLSO0_P15_2_OUT;
             else if (SPI2_CS1_P14_2   == cs_pin)    set_cs->pin   = &IfxQspi2_SLSO1_P14_2_OUT;
             else if (SPI2_CS2_P14_6   == cs_pin)    set_cs->pin   = &IfxQspi2_SLSO2_P14_6_OUT;
             else if (SPI2_CS3_P14_3   == cs_pin)    set_cs->pin   = &IfxQspi2_SLSO3_P14_3_OUT;
@@ -146,6 +145,7 @@ void spi_mux (spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enum 
             else if (SPI2_CS7_P20_10  == cs_pin)    set_cs->pin   = &IfxQspi2_SLSO7_P20_10_OUT;
             else if (SPI2_CS8_P20_6   == cs_pin)    set_cs->pin   = &IfxQspi2_SLSO8_P20_6_OUT;
             else if (SPI2_CS9_P20_3   == cs_pin)    set_cs->pin   = &IfxQspi2_SLSO9_P20_3_OUT;
+            else if (SPI_CS_NULL      == cs_pin)    set_cs->pin   = NULL_PTR;
             else    zf_assert(FALSE);
         }break;
 
@@ -172,8 +172,7 @@ void spi_mux (spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enum 
             else if (SPI3_MISO_P33_13 == miso_pin)  set_pin->mrst = &IfxQspi3_MRSTD_P33_13_IN;
             else    zf_assert(FALSE);
 
-            if      (SPI3_CS0_P02_4   == cs_pin ||
-                          SPI_CS_NULL == cs_pin)    set_cs->pin   = &IfxQspi3_SLSO0_P02_4_OUT;
+            if      (SPI3_CS0_P02_4   == cs_pin)    set_cs->pin   = &IfxQspi3_SLSO0_P02_4_OUT;
             else if (SPI3_CS1_P02_0   == cs_pin)    set_cs->pin   = &IfxQspi3_SLSO1_P02_0_OUT;
             else if (SPI3_CS1_P33_9   == cs_pin)    set_cs->pin   = &IfxQspi3_SLSO1_P33_9_OUT;
             else if (SPI3_CS2_P02_1   == cs_pin)    set_cs->pin   = &IfxQspi3_SLSO2_P02_1_OUT;
@@ -188,6 +187,7 @@ void spi_mux (spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enum 
             else if (SPI3_CS11_P33_10 == cs_pin)    set_cs->pin   = &IfxQspi3_SLSO11_P33_10_OUT;
             else if (SPI3_CS12_P22_2  == cs_pin)    set_cs->pin   = &IfxQspi3_SLSO12_P22_2_OUT;
             else if (SPI3_CS13_P23_1  == cs_pin)    set_cs->pin   = &IfxQspi3_SLSO13_P23_1_OUT;
+            else if (SPI_CS_NULL      == cs_pin)    set_cs->pin   = NULL_PTR;
             else    zf_assert(FALSE);
         }break;
     }
@@ -977,6 +977,7 @@ void spi_init (spi_index_enum spi_n, spi_mode_enum mode, uint32 baud, spi_sck_pi
     IfxQspi_SpiMaster_Channel MasterChHandle;
     IfxQspi_SpiMaster_Pins MasterPins;
     IfxQspi_SpiMaster_Output SlsoPin;
+    IfxQspi_SpiMaster_ChannelConfig MasterChConfig;
     volatile Ifx_QSPI *moudle;
 
     // 检查引脚是否正确
@@ -999,13 +1000,9 @@ void spi_init (spi_index_enum spi_n, spi_mode_enum mode, uint32 baud, spi_sck_pi
     MasterConfig.base.maximumBaudrate   = MAX_BAUD;
     MasterConfig.base.isrProvider       = IfxSrc_Tos_cpu0;
 
-
     MasterConfig.pins = &MasterPins;
     IfxQspi_SpiMaster_initModule(&MasterHandle, &MasterConfig);
-
-    IfxQspi_SpiMaster_ChannelConfig MasterChConfig;
     IfxQspi_SpiMaster_initChannelConfig(&MasterChConfig, &MasterHandle);
-
 
     MasterChConfig.base.baudrate = (float)baud;
     switch(mode)
@@ -1032,23 +1029,29 @@ void spi_init (spi_index_enum spi_n, spi_mode_enum mode, uint32 baud, spi_sck_pi
         }break;
     }
 
-    MasterChConfig.base.mode.dataHeading = SpiIf_DataHeading_msbFirst;
-    MasterChConfig.base.mode.dataWidth   = 8;
-
-    MasterChConfig.base.mode.csActiveLevel = Ifx_ActiveState_low;
-    MasterChConfig.sls.output = SlsoPin;
+    MasterChConfig.base.mode.dataHeading    = SpiIf_DataHeading_msbFirst;
+    MasterChConfig.base.mode.dataWidth      = 8;
+    MasterChConfig.base.mode.csActiveLevel  = Ifx_ActiveState_low;
+    MasterChConfig.sls.output               = SlsoPin;
+    if(SPI_CS_NULL == cs_pin)
+    {
+        MasterChConfig.base.mode.loopback   = 1;
+    }
     IfxQspi_SpiMaster_initChannel(&MasterChHandle, &MasterChConfig);
 
     if(SPI_CS_NULL == cs_pin)
     {
+        IfxQspi_SpiMaster *handle   = MasterChConfig.base.driver->driver;
+        Ifx_QSPI          *qspiSFR  = handle->qspi;
+        qspiSFR->GLOBALCON.B.LB     = 0;
         IfxQspi_setSlaveSelectOutputControl(moudle, IfxQspi_ChannelId_0, FALSE, FALSE);
-        spi_cs_pin      = SPI_CS_NULL;
+        spi_cs_pin                  = SPI_CS_NULL;
         switch(spi_n)
         {
-            case SPI_0: cs_pin = SPI0_CS0_P20_8; break;
-            case SPI_1: cs_pin = SPI1_CS0_P20_8; break;
-            case SPI_2: cs_pin = SPI2_CS0_P15_2; break;
-            case SPI_3: cs_pin = SPI3_CS0_P02_4; break;
+            case SPI_0: cs_pin      = SPI0_CS0_P20_8; break;
+            case SPI_1: cs_pin      = SPI1_CS0_P20_8; break;
+            case SPI_2: cs_pin      = SPI2_CS0_P15_2; break;
+            case SPI_3: cs_pin      = SPI3_CS0_P02_4; break;
         }
     }
 

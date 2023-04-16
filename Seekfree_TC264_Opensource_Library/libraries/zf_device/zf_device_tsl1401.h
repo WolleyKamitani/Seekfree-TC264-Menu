@@ -60,7 +60,7 @@
 
 // TSL1401 的周期采集部分定义 使用到哪个 PIT 就要把  放在哪个 PIT 的中断服务函数下
 #define TSL1401_EXPOSURE_TIME   (10 )                                           // 定义 TSL1401 曝光时间 单位 MS
-#define TSL1401_PIT_INDEX       (CCU60_CH0)                                     // 使用周期中断
+#define TSL1401_PIT_INDEX       (CCU61_CH1)                                     // 使用周期中断
 #define TSL1401_AD_RESOLUTION   (ADC_8BIT)                                      // ADC 精度 8bit
 #define TSL1401_DATA_LEN        (128 )                                          // TSL1401 数据长度
 //=================================================TSL1401 驱动配置====================================================
