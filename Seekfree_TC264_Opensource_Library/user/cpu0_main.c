@@ -66,6 +66,7 @@ int core0_main(void)
     while (TRUE)
     {
         // 此处编写需要循环执行的代码
+        key_action();
         menu_refresh();
         // 此处编写需要循环执行的代码
     }

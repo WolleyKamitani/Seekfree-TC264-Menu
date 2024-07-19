@@ -13,9 +13,10 @@ void key_handler(void)
     // 遍历按键列表
     for (uint8 i = 0; i < KEY_NUMBER; i++)
     {
+        key_list[i].last_value = key_list[i].value;       // 存储当前按键状态
+
         // 更新按键状态
         key_list[i].value = !gpio_get_level(key_pins[i]); // 获取当前按键状态（翻转，因为低电平表示按下）
-        key_list[i].last_value = key_list[i].value;       // 存储当前按键状态
 
         // 按键松开时，长按计时清零
         if (!key_list[i].value && key_list[i].state != DITHER && key_list[i].state != HOLD)
@@ -43,11 +44,13 @@ void key_handler(void)
         switch (key_list[i].state)
         {
         case RELEASE:
-            // 清除按键状态
-            key_list[i].is_press = FALSE;
-            key_list[i].is_hold = FALSE;
-            key_list[i].is_multi = FALSE;
-            key_list[i].click_count = 0;
+            //按键触发未被处理时拒绝新一次的输入
+            if( key_list[i].is_press 
+                || key_list[i].is_hold 
+                || key_list[i].is_multi)
+            {
+                break;
+            }
 
             // 如果此时按钮仍处于按下状态，则进入 DITHER 状态
             if (key_list[i].value)
@@ -141,9 +144,6 @@ void key_handler(void)
             break;
         }
     }
-
-    // 执行按键动作
-    key_action();
 }
 
 /**
@@ -173,6 +173,8 @@ void key_action(void)
             default:
                 break;
             }
+            // 清除按键状态
+            key_list[i].is_press = FALSE;
         }
 
         if (key_list[i].is_hold) // 按键长按对应动作
@@ -192,6 +194,8 @@ void key_action(void)
             default:
                 break;
             }
+            // 清除按键状态
+            key_list[i].is_hold = FALSE;
         }
 
         if (key_list[i].is_multi) // 按键双击对应动作
@@ -209,6 +213,9 @@ void key_action(void)
             default:
                 break;
             }
+            // 清除按键状态
+            key_list[i].is_multi = FALSE;
+            key_list[i].click_count = 0;
         }
     }
 }
